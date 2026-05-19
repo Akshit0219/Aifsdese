@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Complaint Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-root"></div>
+
+  <!-- AUTH SECTION (Spotify Login Style) -->
+  <section id="auth-section">
+    <div id="auth-container">
+      <div class="auth-box">
+        <div class="auth-header">
+          <div class="logo"><i data-lucide="shield-alert" class="logo-icon" style="width: 40px; height: 40px;"></i> SmartCMS</div>
+          <h1 class="view-title" id="auth-title">Log in to continue.</h1>
+        </div>
+
+        <div class="auth-form-container">
+          <!-- Login Form -->
+          <form id="login-form">
+            <div class="form-group">
+              <label for="login-email">Email address</label>
+              <input type="email" id="login-email" class="form-input" placeholder="Email address" required />
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" class="form-input" placeholder="Password" required />
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; border-radius: 500px; margin-top: 16px;" id="login-btn">LOG IN</button>
+          </form>
+
+          <!-- Register Form -->
+          <form id="register-form" class="hidden">
+            <div class="form-group">
+              <label for="reg-name">What should we call you?</label>
+              <input type="text" id="reg-name" class="form-input" placeholder="Enter a profile name" required />
+            </div>
+            <div class="form-group">
+              <label for="reg-email">What's your email?</label>
+              <input type="email" id="reg-email" class="form-input" placeholder="Enter your email" required />
+            </div>
+            <div class="form-group">
+              <label for="reg-password">Create a password</label>
+              <input type="password" id="reg-password" class="form-input" placeholder="Create a password" required />
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; border-radius: 500px; margin-top: 16px;" id="register-btn">SIGN UP</button>
+          </form>
+
+          <div class="auth-divider"></div>
+
+          <div class="auth-switch" id="login-switch-wrap">
+            Don't have an account? <a id="go-to-register">Sign up for SmartCMS</a>
+          </div>
+          <div class="auth-switch hidden" id="register-switch-wrap">
+            Already have an account? <a id="go-to-login">Log in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN APP (Spotify Layout) -->
+  <section id="app-section" class="hidden">
+    <div id="app-container">
+      
+      <!-- SIDEBAR -->
+      <nav class="sidebar">
+        <a href="#" class="logo" id="nav-logo">
+          <i data-lucide="shield-alert" class="logo-icon"></i> SmartCMS
+        </a>
+        
+        <ul class="nav-menu">
+          <li class="nav-item active" id="nav-home">
+            <i data-lucide="home" class="nav-icon"></i> Home
+          </li>
+          <li class="nav-item" id="nav-search">
+            <i data-lucide="search" class="nav-icon"></i> Search
+          </li>
+        </ul>
+
+        <div class="sidebar-divider"></div>
+
+        <ul class="nav-menu">
+          <li class="nav-item" id="nav-new-complaint">
+            <i data-lucide="plus-square" class="nav-icon"></i> File Complaint
+          </li>
+          <li class="nav-item" id="nav-my-complaints">
+            <i data-lucide="library" class="nav-icon"></i> My Complaints
+          </li>
+          <!-- Admin Only -->
+          <li class="nav-item hidden" id="nav-admin-dashboard">
+            <i data-lucide="bar-chart-2" class="nav-icon"></i> Admin Dashboard
+          </li>
+        </ul>
+      </nav>
+
+      <!-- MAIN VIEW -->
+      <main class="main-view" id="main-scroll-area">
+        
+        <!-- Topbar -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <div class="search-container" id="topbar-search">
+              <i data-lucide="search" class="search-icon" style="width: 20px; height: 20px;"></i>
+              <input type="text" id="global-search" class="search-input" placeholder="What do you want to find?" autocomplete="off" />
+            </div>
+          </div>
+          
+          <div class="topbar-right">
+            <button class="btn btn-outline btn-small hidden" id="topbar-admin-badge" style="border-radius: 500px;">Admin</button>
+            <button class="user-btn" id="user-menu-btn">
+              <div class="user-avatar" id="user-avatar">U</div>
+              <span id="user-name">User</span>
+              <i data-lucide="chevron-down" style="width: 16px; height: 16px; margin-right: 4px;"></i>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <div class="content-area" id="view-container">
+          <!-- Views injected via JS -->
+        </div>
+
+      </main>
+    </div>
+  </section>
+
+  <!-- MODALS -->
+
+  <!-- Submit / Edit Complaint Modal -->
+  <div id="complaint-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="complaint-modal-title">File a Complaint</h3>
+        <button class="modal-close" id="close-complaint-modal"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="complaint-form">
+          <div class="form-group">
+            <label for="c-title">Title</label>
+            <input type="text" id="c-title" class="form-input" placeholder="E.g., Broken AC in Lab 3" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="c-category">Category</label>
+              <select id="c-category" class="form-input" required>
+                <option value="" disabled selected>Select category</option>
+                <option value="Infrastructure">Infrastructure</option>
+                <option value="Academic">Academic</option>
+                <option value="Technical">Technical</option>
+                <option value="Hostel">Hostel</option>
+                <option value="Transport">Transport</option>
+                <option value="Financial">Financial</option>
+                <option value="Harassment">Harassment</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="c-location">Location</label>
+              <input type="text" id="c-location" class="form-input" placeholder="E.g., Block A, Room 102" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="c-desc">Description</label>
+            <textarea id="c-desc" class="form-input" placeholder="Please provide detailed information about the issue..." required></textarea>
+          </div>
+          <!-- Admin Status Update (Hidden for users) -->
+          <div class="form-group hidden" id="c-status-group">
+            <label for="c-status">Status</label>
+            <select id="c-status" class="form-input">
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+          
+          <div class="modal-footer" style="padding: 24px 0 0 0; border-top: none; justify-content: flex-end; display: flex; gap: 12px; margin-top: 12px;">
+            <button type="button" class="btn btn-ghost" id="cancel-complaint">Cancel</button>
+            <button type="submit" class="btn btn-primary" style="border-radius: 500px;" id="save-complaint-btn">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Menu Dropdown (Simulated as Modal for simplicity) -->
+  <div id="user-dropdown" class="modal-overlay hidden" style="align-items: flex-start; justify-content: flex-end; padding-top: 64px; padding-right: 24px; background: transparent; backdrop-filter: none;">
+    <div style="background: #282828; border-radius: 4px; padding: 4px; width: 160px; box-shadow: var(--shadow-lg);">
+      <button class="btn btn-ghost" style="width: 100%; justify-content: flex-start; border-radius: 2px; padding: 12px; font-weight: 500;" id="logout-btn">Log out</button>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
